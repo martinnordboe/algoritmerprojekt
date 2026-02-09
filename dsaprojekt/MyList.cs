@@ -123,8 +123,6 @@ namespace dsaprojekt
 			count--;
 		}
 
-		// TODO: Ikke færdig endnu!
-
 		/// <summary>
 		/// Fjerner det første ting på listen, der matcher det angivne element fra listen.
 		/// Bruger standard equality comparer til at sammenligne elementer.
@@ -138,8 +136,13 @@ namespace dsaprojekt
 			int index = -1;
 			for (int i = 0; i < count; i++)
 			{
-				// Skal have sammenlignet alle elementer i arrayet "items" med argumentet
-				// Hvis det findes, så sæt index til at være det rigtige index
+				// Sammenligner elementetet i arrayet "items" med argumentet - om det er ens / equal.
+				if (EqualityComparer<T>.Default.Equals(this.items[i], item))
+				{
+					// Hvis det findes, så sæt index til at være det rigtige index
+					index = i;
+					break;
+				}
 			}
 
 			// Hvis elementet ikke blev fundet, returner false
@@ -151,6 +154,15 @@ namespace dsaprojekt
 			// Fjern itemet på den fundne position
 			RemoveAt(index);
 			return true;
+		}
+
+		/// <summary>
+		/// Sætter alle pladser i arrayet til at være default værdi, og sætter count til 0 igen.
+		/// </summary>
+		public void Clear()
+		{
+			Array.Clear(this.items, 0, count);
+			count = 0;
 		}
 
         /// <summary>
