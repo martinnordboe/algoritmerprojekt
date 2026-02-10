@@ -12,7 +12,7 @@ namespace dsaprojekt
     {
         private T[] items;
         private int count;
-        private IComparer<T> comparer;
+        private IComparer<T> comparer = Comparer<T>.Default;
 
         // MUST HAVE - Er den del af opgaven.
         // Er løst
@@ -30,7 +30,7 @@ namespace dsaprojekt
                 this.items = new T[initalCapacity];
             }
 			count = 0;
-            comparer = Comparer<T>.Default;
+            //comparer = Comparer<T>.Default;
         }
 
 		// MUST HAVE - Er den del af opgaven.
@@ -231,7 +231,61 @@ namespace dsaprojekt
 
 		public void QuickSort()
 		{
+			MyList<T> sorted = QuickSort(this);
+			for(int i = 0; i < count; i++)
+			{
+				items[i] = sorted[i];
+			}
+		} 
 
+		// Bør kigge mere ind i in-place QuickSort i stedet for det her. Det her virker ikke særligt effektivt, da der oprettes utallige nye collections.
+		private MyList<T> QuickSort(MyList<T> collection)
+		{
+			if(collection is null)
+			{
+				throw new Exception();
+			}
+			// Vigtigt, ellers så fejler alt xD den bliver aldrig færdig og giver out of range indexes, hvilket må være 0. Derfor aldrig lad den komme ned på 0.
+			if(collection.Count <= 1)
+			{
+				return collection;
+			}
+
+			T pivot = collection[0];
+
+			MyList<T> before = new MyList<T>(collection.Count);
+			MyList<T> after = new MyList<T>(collection.Count);
+
+			for(int i = 1; i < collection.Count;i++)
+			{
+				T value = collection[i];
+				if(comparer.Compare(value, pivot) < 0)
+				{
+					before.Add(value);
+				}
+				else
+				{
+					after.Add(value);
+				}
+			}
+
+			MyList<T> sortedBefore = QuickSort(before);
+			MyList<T> sortedAfter = QuickSort(after);
+
+			MyList<T> result = new MyList<T>(collection.Count);
+			for(int i = 0; i < sortedBefore.Count; i++)
+			{
+				result.Add(sortedBefore[i]);
+			}
+
+			result.Add(pivot);
+
+			for(int i = 0; i < sortedAfter.Count; i++)
+			{
+				result.Add(sortedAfter[i]);
+			}
+
+			return result;
 		}
 
 	}
