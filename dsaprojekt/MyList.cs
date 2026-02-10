@@ -212,7 +212,21 @@ namespace dsaprojekt
 
 		public void BubbleSort()
 		{
-
+			bool swapped = true;
+			while(swapped == true) 
+			{
+				swapped = false;
+				for(int i = 1; i < count; i++)
+				{
+					if(comparer.Compare(items[i], items[i - 1]) < 0)
+					{
+						T temporary = items[i];
+						items[i] = items[i - 1];
+						items[i - 1] = temporary;
+						swapped = true;
+					}
+				}
+			}
 		}
 
 		public void QuickSort()
