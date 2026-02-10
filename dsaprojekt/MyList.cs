@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace dsaprojekt
 {
@@ -13,10 +14,12 @@ namespace dsaprojekt
         private T[] items;
         private int count;
         private IComparer<T> comparer = Comparer<T>.Default;
+		public int comparisonCount = 0;
 
         // MUST HAVE - Er den del af opgaven.
         // Er løst
         public int Count { get { return count; } }
+
 
         
         public MyList(int initalCapacity = 4)
@@ -196,6 +199,8 @@ namespace dsaprojekt
 
 		public void InsertionSort()
 		{
+			comparisonCount = 0;
+
 			for(int i = 0; i < count; i++)
 			{
 				T value = this.items[i];
@@ -203,21 +208,26 @@ namespace dsaprojekt
 
 				while(pointer > 0 && comparer.Compare(value, items[pointer - 1]) < 0)
 				{
+					comparisonCount++;
 					items[pointer] = items[pointer - 1];
 					pointer--;
 				}
+				comparisonCount++;
 				items[pointer] = value;
 			}
 		}
 
 		public void BubbleSort()
 		{
+			comparisonCount = 0;
+
 			bool swapped = true;
 			while(swapped == true) 
 			{
 				swapped = false;
 				for(int i = 1; i < count; i++)
 				{
+					comparisonCount++;
 					if(comparer.Compare(items[i], items[i - 1]) < 0)
 					{
 						T temporary = items[i];
@@ -231,6 +241,8 @@ namespace dsaprojekt
 
 		public void QuickSort()
 		{
+			comparisonCount = 0;
+
 			MyList<T> sorted = QuickSort(this);
 			for(int i = 0; i < count; i++)
 			{
@@ -259,6 +271,7 @@ namespace dsaprojekt
 			for(int i = 1; i < collection.Count;i++)
 			{
 				T value = collection[i];
+				comparisonCount++;
 				if(comparer.Compare(value, pivot) < 0)
 				{
 					before.Add(value);

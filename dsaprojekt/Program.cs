@@ -24,23 +24,28 @@ namespace dsaprojekt
 			PopulateMyList(myListOfReverseSortedJson, Path.Combine(baseDataPath, "reverseSorted.json"));
 			PopulateMyList(myListOfSortedJson, Path.Combine(baseDataPath, "sorted.json"));
 
-			myListOfNotSortedJson.InsertionSort();
+			myListOfNotSortedJson.QuickSort();
 			myListOfReverseSortedJson.BubbleSort();
 			myListOfSortedJson.QuickSort();
 
 			Console.WriteLine("\n\n");
 			Console.WriteLine("SORTED!");
 			Console.WriteLine("\n");
+
+
+			Console.WriteLine("FROM THE JSON 'notSorted.json\n");
 			foreach (var item in myListOfNotSortedJson)
 			{
 				Console.WriteLine(item);
 			}
+			Console.WriteLine($"\n----Performance----\nComparisons: {myListOfNotSortedJson.comparisonCount}\n");
 			Console.WriteLine("\n\n");
 
 			WriteJsonData();
 		}
 
-        static void PopulateMyList<T>(MyList<T> myList, string completeFilePath)
+
+		static void PopulateMyList<T>(MyList<T> myList, string completeFilePath)
         {
 			string jsonContent = File.ReadAllText(completeFilePath);
 
