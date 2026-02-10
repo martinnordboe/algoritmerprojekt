@@ -191,5 +191,34 @@ namespace dsaprojekt
 			Array.Copy(this.items, newArray, this.items.Length);
 			this.items = newArray;
 		}
+
+
+
+		public void InsertionSort()
+		{
+			for(int i = 0; i < count; i++)
+			{
+				T value = this.items[i];
+				int pointer = i;
+
+				while(pointer > 0 && comparer.Compare(value, items[pointer - 1]) < 0)
+				{
+					items[pointer] = items[pointer - 1];
+					pointer--;
+				}
+				items[pointer] = value;
+			}
+		}
+
+		public void BubbleSort()
+		{
+
+		}
+
+		public void QuickSort()
+		{
+
+		}
+
 	}
 }
