@@ -1,36 +1,46 @@
-﻿using System.Text.Json;
+﻿using System.Net.Http.Json;
+using System.Reflection.Metadata;
+using System.Text.Json;
 
 namespace dsaprojekt
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static string basePath = Path.Combine(Environment.CurrentDirectory, "Data");
+        static string[] jsonFiles = { "notSorted.json", "reverseSorted.json", "sorted.json" };
+        
+		static MyList<int> myListOfNotSortedJson = new MyList<int>();
+		static MyList<int> myListOfReverseSortedJson = new MyList<int>();
+		static MyList<int> myListOfSortedJson = new MyList<int>();
+
+		static void Main(string[] args)
         {
-            string basePath = Path.Combine(Environment.CurrentDirectory, "Data");
-            string[] jsonFiles = { "notSorted.json", "reverseSorted.json", "sorted.json" };
 
-            string filePath = Path.Combine(basePath, jsonFiles[0]);
-            string jsonContent = File.ReadAllText(filePath);
+			PopulateMyList(myListOfNotSortedJson, Path.Combine(basePath, "notSorted.json"));
+			PopulateMyList(myListOfReverseSortedJson, Path.Combine(basePath, "reverseSorted.json"));
+			PopulateMyList(myListOfSortedJson, Path.Combine(basePath, "sorted.json"));
+		}
 
-            //Console.WriteLine(jsonContent);
+        static void PopulateMyList<T>(MyList<T> myList, string completeFilePathy)
+        {
+			string jsonContent = File.ReadAllText(completeFilePathy);
 
+			JsonSerializerOptions options = new JsonSerializerOptions();
+			var data = JsonSerializer.Deserialize<JsonData<T>>(jsonContent);
 
-            JsonSerializerOptions options = new JsonSerializerOptions();
-            var data = JsonSerializer.Deserialize<JsonData>(jsonContent);
+			if (data != null)
+			{
+				foreach (var item in data.values)
+				{
+					myList.Add(item);
+				}
+			}
+			Console.WriteLine($"Contents of {completeFilePathy} have been added to list");
+		}
+	}
 
-            if(data != null)
-            {
-                foreach(var item in data.values)
-                {
-                    Console.WriteLine(item);
-                }
-            }
-        }
-
-    }
-
-	public class JsonData
+	public class JsonData<T>
 	{
-        public int[] values { get; set; }
+		public T[] values { get; set; }
 	}
 }
