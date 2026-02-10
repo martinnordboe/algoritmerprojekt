@@ -15,6 +15,9 @@ namespace dsaprojekt
         private int count;
         private IComparer<T> comparer = Comparer<T>.Default;
 		public int comparisonCount = 0;
+		public int elapseNanoseconds = 0;
+		public float elapseMilliseconds = 0.0F;
+
 
         // MUST HAVE - Er den del af opgaven.
         // Er løst
@@ -199,6 +202,7 @@ namespace dsaprojekt
 
 		public void InsertionSort()
 		{
+			Stopwatch sw = Stopwatch.StartNew();
 			comparisonCount = 0;
 
 			for(int i = 0; i < count; i++)
@@ -206,7 +210,7 @@ namespace dsaprojekt
 				T value = this.items[i];
 				int pointer = i;
 
-				while(pointer > 0 && comparer.Compare(value, items[pointer - 1]) < 0)
+				while (pointer > 0 && comparer.Compare(value, items[pointer - 1]) < 0)
 				{
 					comparisonCount++;
 					items[pointer] = items[pointer - 1];
@@ -215,10 +219,14 @@ namespace dsaprojekt
 				comparisonCount++;
 				items[pointer] = value;
 			}
+			sw.Stop();
+			Console.WriteLine($"Time elapsed: {sw.Elapsed.TotalMilliseconds} ms");
+			Console.WriteLine($"Time elapsed: {sw.Elapsed.TotalNanoseconds} ns");
 		}
 
 		public void BubbleSort()
 		{
+			Stopwatch sw = Stopwatch.StartNew();
 			comparisonCount = 0;
 
 			bool swapped = true;
@@ -237,6 +245,9 @@ namespace dsaprojekt
 					}
 				}
 			}
+			sw.Stop();
+			Console.WriteLine($"Time elapsed: {sw.Elapsed.TotalMilliseconds} ms");
+			Console.WriteLine($"Time elapsed: {sw.Elapsed.TotalNanoseconds} ns");
 		}
 
 		public void QuickSort()
@@ -253,7 +264,8 @@ namespace dsaprojekt
 		// Bør kigge mere ind i in-place QuickSort i stedet for det her. Det her virker ikke særligt effektivt, da der oprettes utallige nye collections.
 		private MyList<T> QuickSort(MyList<T> collection)
 		{
-			if(collection is null)
+			Stopwatch sw = Stopwatch.StartNew();
+			if (collection is null)
 			{
 				throw new Exception();
 			}
@@ -298,6 +310,9 @@ namespace dsaprojekt
 				result.Add(sortedAfter[i]);
 			}
 
+			sw.Stop();
+			Console.WriteLine($"Time elapsed: {sw.Elapsed.TotalMilliseconds} ms");
+			Console.WriteLine($"Time elapsed: {sw.Elapsed.TotalNanoseconds} ns");
 			return result;
 		}
 

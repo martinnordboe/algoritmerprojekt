@@ -24,9 +24,15 @@ namespace dsaprojekt
 			PopulateMyList(myListOfReverseSortedJson, Path.Combine(baseDataPath, "reverseSorted.json"));
 			PopulateMyList(myListOfSortedJson, Path.Combine(baseDataPath, "sorted.json"));
 
-			myListOfNotSortedJson.QuickSort();
+			Console.WriteLine("Insertion Sorting");
+			myListOfNotSortedJson.InsertionSort();
+			Console.WriteLine("\n\n");
 			myListOfReverseSortedJson.BubbleSort();
+			Console.WriteLine("Bubble Sorting");
+			Console.WriteLine("\n\n");
+			Console.WriteLine("Quick Sorting");
 			myListOfSortedJson.QuickSort();
+			Console.WriteLine("\n\n");
 
 			Console.WriteLine("\n\n");
 			Console.WriteLine("SORTED!");
