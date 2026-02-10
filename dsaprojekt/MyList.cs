@@ -15,8 +15,8 @@ namespace dsaprojekt
         private int count;
         private IComparer<T> comparer = Comparer<T>.Default;
 		public int comparisonCount = 0;
-		public int elapseNanoseconds = 0;
-		public float elapseMilliseconds = 0.0F;
+		public double elapsedNanoseconds = 0.0D;
+		public double elapsedMilliseconds = 0.0D;
 
 
         // MUST HAVE - Er den del af opgaven.
@@ -220,8 +220,8 @@ namespace dsaprojekt
 				items[pointer] = value;
 			}
 			sw.Stop();
-			Console.WriteLine($"Time elapsed: {sw.Elapsed.TotalMilliseconds} ms");
-			Console.WriteLine($"Time elapsed: {sw.Elapsed.TotalNanoseconds} ns");
+			elapsedMilliseconds = sw.Elapsed.TotalMilliseconds;
+			elapsedNanoseconds = sw.Elapsed.TotalNanoseconds;
 		}
 
 		public void BubbleSort()
@@ -246,8 +246,8 @@ namespace dsaprojekt
 				}
 			}
 			sw.Stop();
-			Console.WriteLine($"Time elapsed: {sw.Elapsed.TotalMilliseconds} ms");
-			Console.WriteLine($"Time elapsed: {sw.Elapsed.TotalNanoseconds} ns");
+			elapsedMilliseconds = sw.Elapsed.TotalMilliseconds;
+			elapsedNanoseconds = sw.Elapsed.TotalNanoseconds;
 		}
 
 		public void QuickSort()
@@ -311,8 +311,8 @@ namespace dsaprojekt
 			}
 
 			sw.Stop();
-			Console.WriteLine($"Time elapsed: {sw.Elapsed.TotalMilliseconds} ms");
-			Console.WriteLine($"Time elapsed: {sw.Elapsed.TotalNanoseconds} ns");
+			elapsedMilliseconds = sw.Elapsed.TotalMilliseconds;
+			elapsedNanoseconds = sw.Elapsed.TotalNanoseconds;
 			return result;
 		}
 

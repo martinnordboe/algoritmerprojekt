@@ -44,7 +44,7 @@ namespace dsaprojekt
 			{
 				Console.WriteLine(item);
 			}
-			Console.WriteLine($"\n----Performance----\nComparisons: {myListOfNotSortedJson.comparisonCount}\n");
+			Console.WriteLine($"\n----Performance----\nComparisons: {myListOfNotSortedJson.comparisonCount}\nTime elapsed: {myListOfNotSortedJson.elapsedMilliseconds} ms\nTime elapsed: {myListOfNotSortedJson.elapsedNanoseconds} ns");
 			Console.WriteLine("\n\n");
 
 			WriteJsonData();
