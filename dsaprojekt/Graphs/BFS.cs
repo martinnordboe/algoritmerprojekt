@@ -1,7 +1,14 @@
 ﻿namespace dsaprojekt.Graphs
 {
-	public class BFS
+	public class BFS<T>
 	{
+		public List<Node<T>> VisitedOrder;
+
+		public BFS()
+		{
+			VisitedOrder = new List<Node<T>>();
+		}
+
 		//procedure BFS(Graph, source):
 		//create a queue Q
 		//enqueue source onto Q
@@ -37,11 +44,10 @@
 		//6. Algoritmen gentages fra step 3
 
 
-		public bool Search<T>(Node<T> start, T goal)
+		public bool Search(Node<T> start, Node<T> goal)
 		{
 			//1. Opret en queue og placer en fiktiv kant gående fra og til start
 			Queue<Node<T>> queue = new Queue<Node<T>>();
-			List<Node<T>> VisitedOrder = new List<Node<T>>();
 			HashSet<Node<T>> visited = new HashSet<Node<T>>();
 			// Dictionary til holdes styr på hver enkelte Node parent
 			//• Stien findes ved at følge parentes fra destinationen tilbage til start
@@ -63,7 +69,7 @@
 				//slutnoden
 				//• Algoritmen afsluttes hvis dette er tilfældet
 				//• Stien findes ved at følge parentes fra destinationen tilbage til start
-				if (current.Data.Equals(goal))
+				if (current.Data.Equals(goal.Data))
 				{
 					return true;
 				}

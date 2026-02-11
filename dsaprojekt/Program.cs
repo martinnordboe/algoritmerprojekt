@@ -71,6 +71,22 @@ namespace dsaprojekt
 				Console.WriteLine(edge.From.Data);
 				Console.WriteLine("\n");
 			}
+
+			TestGraphSearch(park, "Entrance", "Volcano Ride");
+		}
+
+		static void TestGraphSearch(Graph<string> graph, string start, string goal)
+		{
+			BFS<string> bfs = new BFS<string>();
+			if (bfs.Search(graph.GetNode(start), graph.GetNode(goal)))
+			{
+				Console.WriteLine("BFS Results:");
+				Console.WriteLine($"Visited order:");
+				foreach(var item in bfs.VisitedOrder)
+				{
+					Console.WriteLine(item.Data);
+				}
+			}
 		}
 
 
