@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Net.Http.Json;
 using System.Reflection.Metadata;
 using System.Text.Json;
 using dsaprojekt.Graphs;
@@ -13,39 +14,15 @@ namespace dsaprojekt
 		static string outputResultPath = Path.Combine(baseOutputPath, "results.json");
 
 		static string[] jsonFiles = { "notSorted.json", "reverseSorted.json", "sorted.json" };
-        
-		static MyList<int> myListOfNotSortedJson = new MyList<int>();
-		static MyList<int> myListOfReverseSortedJson = new MyList<int>();
-		static MyList<int> myListOfSortedJson = new MyList<int>();
+       
+		static List<ExportJsonData<int>> results = new List<ExportJsonData<int>>();
 
 		static void Main(string[] args)
         {
-			PopulateMyList(myListOfNotSortedJson, Path.Combine(baseDataPath, "notSorted.json"));
-			PopulateMyList(myListOfReverseSortedJson, Path.Combine(baseDataPath, "reverseSorted.json"));
-			PopulateMyList(myListOfSortedJson, Path.Combine(baseDataPath, "sorted.json"));
-
-			Console.WriteLine("Insertion Sorting");
-			myListOfNotSortedJson.InsertionSort();
-			Console.WriteLine("\n\n");
-			myListOfReverseSortedJson.BubbleSort();
-			Console.WriteLine("Bubble Sorting");
-			Console.WriteLine("\n\n");
-			Console.WriteLine("Quick Sorting");
-			myListOfSortedJson.QuickSort();
-			Console.WriteLine("\n\n");
-
-			Console.WriteLine("\n\n");
-			Console.WriteLine("SORTED!");
-			Console.WriteLine("\n");
-
-
-			Console.WriteLine("FROM THE JSON 'notSorted.json\n");
-			foreach (var item in myListOfNotSortedJson)
+			foreach(var file in jsonFiles)
 			{
-				Console.WriteLine(item);
+				RunAllAlgorithmsOnJsonFile(file);
 			}
-			Console.WriteLine($"\n----Performance----\nComparisons: {myListOfNotSortedJson.comparisonCount}\nTime elapsed: {myListOfNotSortedJson.elapsedMilliseconds} ms\nTime elapsed: {myListOfNotSortedJson.elapsedNanoseconds} ns");
-			Console.WriteLine("\n\n");
 
 			WriteJsonData();
 		}
@@ -78,15 +55,27 @@ namespace dsaprojekt
 			return values;
 		}
 
+		static void RunAllAlgorithmsOnJsonFile(string fileName)
+		{
+			MyList<int> insertionSortedMyList = new MyList<int>();
+			MyList<int> bubbleSortedMyList = new MyList<int>();
+			MyList<int> quickSortedMyList = new MyList<int>();
+
+			PopulateMyList(insertionSortedMyList, Path.Combine(baseDataPath, fileName));
+			PopulateMyList(bubbleSortedMyList, Path.Combine(baseDataPath, fileName));
+			PopulateMyList(quickSortedMyList, Path.Combine(baseDataPath, fileName));
+
+			insertionSortedMyList.InsertionSort();
+			bubbleSortedMyList.BubbleSort();
+			quickSortedMyList.QuickSort();
+
+			results.Add(new ExportJsonData<int> { fileName = fileName, sorting = "Insertion Sort", comparisons = insertionSortedMyList.comparisonCount, elapsedMilliseconds = insertionSortedMyList.elapsedMilliseconds, elapsedNanoseconds = insertionSortedMyList.elapsedNanoseconds, values = DepopulateMyList(insertionSortedMyList) });
+			results.Add(new ExportJsonData<int> { fileName = fileName, sorting = "Bubble Sort", comparisons = bubbleSortedMyList.comparisonCount, elapsedMilliseconds = bubbleSortedMyList.elapsedMilliseconds, elapsedNanoseconds = bubbleSortedMyList.elapsedNanoseconds, values = DepopulateMyList(bubbleSortedMyList) });
+			results.Add(new ExportJsonData<int> { fileName = fileName, sorting = "Quick Sort", comparisons = quickSortedMyList.comparisonCount, elapsedMilliseconds = quickSortedMyList.elapsedMilliseconds, elapsedNanoseconds = quickSortedMyList.elapsedNanoseconds, values = DepopulateMyList(quickSortedMyList) });
+		}
+
 		static void WriteJsonData()
 		{
-			List<ExportJsonData<int>> results = new List<ExportJsonData<int>>()
-			{
-				new ExportJsonData<int> { fileName = "notSorted.json", sorting = "Insertion Sort", comparisons = myListOfNotSortedJson.comparisonCount, elapsedMilliseconds = myListOfNotSortedJson.elapsedMilliseconds, elapsedNanoseconds = myListOfNotSortedJson.elapsedNanoseconds, values = DepopulateMyList(myListOfNotSortedJson) },
-				new ExportJsonData<int> { fileName = "reverseSorted.json", sorting = "Bubble Sort", comparisons = myListOfReverseSortedJson.comparisonCount, elapsedMilliseconds = myListOfReverseSortedJson.elapsedMilliseconds, elapsedNanoseconds = myListOfReverseSortedJson.elapsedNanoseconds, values = DepopulateMyList(myListOfReverseSortedJson) },
-				new ExportJsonData<int> { fileName = "sorted.json", sorting = "Quick Sort", comparisons = myListOfSortedJson.comparisonCount, elapsedMilliseconds = myListOfSortedJson.elapsedMilliseconds, elapsedNanoseconds = myListOfSortedJson.elapsedNanoseconds, values = DepopulateMyList(myListOfSortedJson) }
-			};
-
 			JsonSerializerOptions options = new JsonSerializerOptions() { WriteIndented = true };
 			var jsonContent = JsonSerializer.Serialize(results, options);
 
