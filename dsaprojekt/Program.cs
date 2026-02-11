@@ -43,6 +43,34 @@ namespace dsaprojekt
 			park.AddNode("Climbing Tower");
 
 			park.AddNode("Volcano Ride");
+
+
+
+			park.AddEdge("Entrance", "Carousel");
+			park.AddEdge("Entrance", "Mini Train");
+			park.AddEdge("Entrance", "Ice Cream");
+
+			park.AddEdge("Carousel", "Haunted House");
+			park.AddEdge("Carousel", "Roller Coaster");
+
+			park.AddEdge("Roller Coaster", "Climbing Tower");
+
+			park.AddEdge("Climbing Tower", "Volcano Ride");
+
+
+			park.AddEdge("Mini Train", "Water Ride");
+			
+			park.AddEdge("Ice Cream", "Pirate Ship");
+
+
+			Console.WriteLine($"Data of node 'Carousel': {park.GetNode("Carousel").Data}");
+			Console.WriteLine("\nAll Edges:\n");
+			foreach (var edge in park.GetNode("Carousel").Edges)
+			{
+				Console.WriteLine(edge.To.Data);
+				Console.WriteLine(edge.From.Data);
+				Console.WriteLine("\n");
+			}
 		}
 
 

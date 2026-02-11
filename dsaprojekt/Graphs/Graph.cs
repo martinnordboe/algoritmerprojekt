@@ -38,5 +38,18 @@ namespace dsaprojekt.Graphs
 			AddDirectedEdge(from, to);
 			AddDirectedEdge(to, from);
 		}
+
+		public Node<T> GetNode(T value)
+		{
+			if (nodes.ContainsKey(value))
+			{
+				return nodes[value];
+			}
+			else
+			{
+				return null;
+			}
+		}
+
 	}
 }
