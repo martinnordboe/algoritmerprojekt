@@ -25,6 +25,24 @@ namespace dsaprojekt
 			}
 
 			WriteJsonData();
+
+			Graph<string> park = new Graph<string>();
+
+			// Skulle gerne være alle de nodes i opgaven - HUSK AT KIGGE IGENNEM IGEN, FOR AT SIKRE AT DET ER ALLE
+			park.AddNode("Entrance");
+
+			park.AddNode("Carousel");
+			park.AddNode("Mini Train");
+			park.AddNode("Ice Cream");
+
+			park.AddNode("Roller Coaster");
+			park.AddNode("Haunted House");
+			park.AddNode("Water Ride");
+			park.AddNode("Pirate Ship");
+
+			park.AddNode("Climbing Tower");
+
+			park.AddNode("Volcano Ride");
 		}
 
 
