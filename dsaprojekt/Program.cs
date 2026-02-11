@@ -82,9 +82,9 @@ namespace dsaprojekt
 		{
 			List<ExportJsonData<int>> results = new List<ExportJsonData<int>>()
 			{
-				new ExportJsonData<int> { fileName = "notSorted.json", values = DepopulateMyList(myListOfNotSortedJson) },
-				new ExportJsonData<int> { fileName = "reverseSorted.json", values = DepopulateMyList(myListOfReverseSortedJson) },
-				new ExportJsonData<int> { fileName = "sorted.json", values = DepopulateMyList(myListOfSortedJson) }
+				new ExportJsonData<int> { fileName = "notSorted.json", sorting = "Insertion Sort", comparisons = myListOfNotSortedJson.comparisonCount, elapsedMilliseconds = myListOfNotSortedJson.elapsedMilliseconds, elapsedNanoseconds = myListOfNotSortedJson.elapsedNanoseconds, values = DepopulateMyList(myListOfNotSortedJson) },
+				new ExportJsonData<int> { fileName = "reverseSorted.json", sorting = "Bubble Sort", comparisons = myListOfReverseSortedJson.comparisonCount, elapsedMilliseconds = myListOfReverseSortedJson.elapsedMilliseconds, elapsedNanoseconds = myListOfReverseSortedJson.elapsedNanoseconds, values = DepopulateMyList(myListOfReverseSortedJson) },
+				new ExportJsonData<int> { fileName = "sorted.json", sorting = "Quick Sort", comparisons = myListOfSortedJson.comparisonCount, elapsedMilliseconds = myListOfSortedJson.elapsedMilliseconds, elapsedNanoseconds = myListOfSortedJson.elapsedNanoseconds, values = DepopulateMyList(myListOfSortedJson) }
 			};
 
 			JsonSerializerOptions options = new JsonSerializerOptions() { WriteIndented = true };
@@ -107,7 +107,10 @@ namespace dsaprojekt
     public class ExportJsonData<T>
     {
 		public string fileName { get ; set; }
-
+		public string sorting { get; set; }
+		public int comparisons { get; set; }
+		public double elapsedMilliseconds { get; set; }
+		public double elapsedNanoseconds { get; set; }
         public T[] values { get; set; }
     }
 }
