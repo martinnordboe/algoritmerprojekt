@@ -82,9 +82,15 @@ namespace dsaprojekt
 			{
 				Console.WriteLine("BFS Results:");
 				Console.WriteLine($"Visited order:");
-				foreach(var item in bfs.VisitedOrder)
+				for(int i = 0; i < bfs.VisitedOrder.Count; i++)
 				{
-					Console.WriteLine(item.Data);
+					Console.WriteLine(bfs.VisitedOrder[i].Data);
+					if(i != bfs.VisitedOrder.Count -1)
+					{
+						Console.WriteLine("  |  ");
+						Console.WriteLine("  |  ");
+						Console.WriteLine("  V ");
+					}
 				}
 			}
 		}
