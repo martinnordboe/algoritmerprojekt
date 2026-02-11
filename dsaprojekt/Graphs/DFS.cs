@@ -1,7 +1,20 @@
 ﻿namespace dsaprojekt.Graphs
 {
-	public class DFS
+	public class DFS<T>
 	{
+		public List<Node<T>> VisitedOrder;
+
+		// Dictionary til holdes styr på hver enkelte Node parent
+		//• Stien findes ved at følge parentes fra destinationen tilbage til start
+		Dictionary<Node<T>, Node<T>> Parent;
+
+		public DFS()
+		{
+			VisitedOrder = new List<Node<T>>();
+			Parent = new Dictionary<Node<T>, Node<T>>();
+		}
+
+
 		// Pseudo kode fra undervisning
 
 		// procedure DFS-iterative(G,v):
@@ -36,5 +49,75 @@
 		//der
 
 		//7. Algoritmen gentages fra punkt 2 til målet er fundet
+
+
+		public bool Search(Node<T> start, Node<T> goal)
+		{
+			//1. Opret en stack og placer en fiktiv kant gående fra og til start
+			Stack<Node<T>> stack = new Stack<Node<T>>();
+			HashSet<Node<T>> visited = new HashSet<Node<T>>();
+
+			stack.Push(start);
+			//3. Noter parent til noden, start er parent til sig selv(kan også
+			//gøres i step 6, dette kan være lettere)
+			Parent[start] = start;
+
+			while (stack.Count > 0)
+			{
+				//2. Fjern og anvend top kanten fra jeres stack
+				Node<T> current = stack.Pop();
+
+				// Tjek om allerede besøgt, hvis ja, så spring over
+				if (visited.Contains(current))
+				{
+					continue;
+				}
+
+				//4. Noter destinationsnoden som besøgt
+				visited.Add(current);
+				VisitedOrder.Add(current);
+
+				//5. Hvis en slutnode ønskes fundet testes det om destinationen er
+				//slutnoden
+				if (current.Equals(goal))
+				{
+					return true;
+				}
+
+				//6. Hvis slutnoden ikke er fundet tilføjes alle nabokanter med
+				//ubesøgte noder til stacken, hvis der ingen noder er backtrackes
+				//der
+				foreach (var edge in current.Edges)
+				{
+					if (!visited.Contains(edge.To))
+					{
+						stack.Push(edge.To);
+						if (!Parent.ContainsKey(edge.To))
+						{
+							Parent[edge.To] = current;
+						}
+					}
+				}
+			}
+
+			return false;
+		}
+
+
+		public List<Node<T>> GetPath(Node<T> start, Node<T> goal)
+		{
+			List<Node<T>> path = new List<Node<T>>();
+			Node<T> current = goal;
+
+			while (!current.Equals(start))
+			{
+				path.Add(current);
+				current = Parent[current];
+			}
+			path.Add(start);
+			path.Reverse();
+
+			return path;
+		}
 	}
 }

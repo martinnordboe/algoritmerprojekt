@@ -106,6 +106,37 @@ namespace dsaprojekt
 				}
 			}
 
+			Console.WriteLine("---DEPTH FIRST SEARCH NU---");
+
+			DFS<string> dfs = new DFS<string>();
+			if (dfs.Search(graph.GetNode(start), graph.GetNode(goal)))
+			{
+				Console.WriteLine("DFS Results:");
+				Console.WriteLine($"Visited order:");
+				for (int i = 0; i < dfs.VisitedOrder.Count; i++)
+				{
+					Console.WriteLine(dfs.VisitedOrder[i].Data);
+					if (i != dfs.VisitedOrder.Count - 1)
+					{
+						Console.WriteLine("  |  ");
+						Console.WriteLine("  |  ");
+						Console.WriteLine("  V ");
+					}
+				}
+				Console.WriteLine($"\n\nPath to goal:");
+				List<Node<string>> dfsPath = dfs.GetPath(graph.GetNode(start), graph.GetNode(goal));
+				for (int i = 0; i < dfsPath.Count; i++)
+				{
+					Console.WriteLine(dfsPath[i].Data);
+					if (i != dfsPath.Count - 1)
+					{
+						Console.WriteLine("  |  ");
+						Console.WriteLine("  |  ");
+						Console.WriteLine("  V ");
+					}
+				}
+			}
+
 		}
 
 
