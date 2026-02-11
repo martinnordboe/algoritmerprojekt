@@ -4,9 +4,14 @@
 	{
 		public List<Node<T>> VisitedOrder;
 
+		// Dictionary til holdes styr på hver enkelte Node parent
+		//• Stien findes ved at følge parentes fra destinationen tilbage til start
+		Dictionary<Node<T>, Node<T>> Parent;
+
 		public BFS()
 		{
 			VisitedOrder = new List<Node<T>>();
+			Parent = new Dictionary<Node<T>, Node<T>>();
 		}
 
 		//procedure BFS(Graph, source):
@@ -49,15 +54,12 @@
 			//1. Opret en queue og placer en fiktiv kant gående fra og til start
 			Queue<Node<T>> queue = new Queue<Node<T>>();
 			HashSet<Node<T>> visited = new HashSet<Node<T>>();
-			// Dictionary til holdes styr på hver enkelte Node parent
-			//• Stien findes ved at følge parentes fra destinationen tilbage til start
-			Dictionary<Node<T>, Node<T>> Parent = new Dictionary<Node<T>, Node<T>>();
 
 			queue.Enqueue(start);
 			//2. Marker startnoden som besøgt
 			visited.Add(start);
 			VisitedOrder.Add(start);
-			
+
 			Parent[start] = start;
 
 			while (queue.Count > 0)
@@ -94,5 +96,21 @@
 			return false;
 		}
 
+
+		public List<Node<T>> GetPath(Node<T> start, Node<T> goal)
+		{
+			List<Node<T>> path = new List<Node<T>>();
+			Node<T> current = goal;
+
+			while (!current.Equals(start))
+			{
+				path.Add(current);
+				current = Parent[current];
+			}
+			path.Add(start);
+			path.Reverse();
+
+			return path;
+		}
 	}
 }

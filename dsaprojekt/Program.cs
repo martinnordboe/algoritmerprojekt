@@ -92,7 +92,20 @@ namespace dsaprojekt
 						Console.WriteLine("  V ");
 					}
 				}
+				Console.WriteLine($"\n\nPath to goal:");
+				List<Node<string>> bfsPath = bfs.GetPath(graph.GetNode(start), graph.GetNode(goal));
+				for (int i = 0; i < bfsPath.Count; i++)
+				{
+					Console.WriteLine(bfsPath[i].Data);
+					if (i != bfsPath.Count - 1)
+					{
+						Console.WriteLine("  |  ");
+						Console.WriteLine("  |  ");
+						Console.WriteLine("  V ");
+					}
+				}
 			}
+
 		}
 
 
