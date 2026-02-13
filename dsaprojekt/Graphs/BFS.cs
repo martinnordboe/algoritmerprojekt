@@ -52,6 +52,7 @@
 		public bool Search(Node<T> start, Node<T> goal)
 		{
 			//1. Opret en queue og placer en fiktiv kant gående fra og til start
+			// Bruger nodes i stedet for edges
 			Queue<Node<T>> queue = new Queue<Node<T>>();
 			HashSet<Node<T>> visited = new HashSet<Node<T>>();
 
@@ -101,17 +102,20 @@
 			return false;
 		}
 
-
+		// Backtracker fra goal node til start node, ved at bruge Parent dictionary. Dette er den smartere metode, i stedet for at sætte Parent property.
 		public List<Node<T>> GetPath(Node<T> start, Node<T> goal)
 		{
 			List<Node<T>> path = new List<Node<T>>();
+			// Vi starter med goal og arbejder os baglæns ved hjælp af parent dictionary
 			Node<T> current = goal;
 
+			// Så længe at nuværende valgte node ikke er vores start node, så fortsætter vi op gennem parents fra goal node.
 			while (!current.Equals(start))
 			{
 				path.Add(current);
 				current = Parent[current];
 			}
+			// Når pathen er fundet og nuværende node er samme som start node, så tilføjes start node og listen vendes, så en korrekt vej vises.
 			path.Add(start);
 			path.Reverse();
 
