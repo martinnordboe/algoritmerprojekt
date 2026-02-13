@@ -10,7 +10,7 @@ namespace dsaprojekt
     {
         static string baseDataPath = Path.Combine(AppContext.BaseDirectory, "Data");
 
-		static string baseOutputPath = Path.Combine(Environment.CurrentDirectory, "Output");
+		static string baseOutputPath = Path.Combine(AppContext.BaseDirectory, "Output");
 		static string outputResultPath = Path.Combine(baseOutputPath, "results.json");
 
 		static string[] jsonFiles = { "notSorted.json", "reverseSorted.json", "sorted.json" };
@@ -71,6 +71,8 @@ namespace dsaprojekt
 				Console.WriteLine(edge.From.Data);
 				Console.WriteLine("\n");
 			}
+
+			TestGraphSearch(park, "Entrance", "Water Ride");
 
 			TestGraphSearch(park, "Entrance", "Volcano Ride");
 		}
@@ -172,22 +174,28 @@ namespace dsaprojekt
 			MyList<int> insertionSortedMyList = new MyList<int>();
 			MyList<int> bubbleSortedMyList = new MyList<int>();
 			MyList<int> quickSortedMyList = new MyList<int>();
+			MyList<int> middleQuickSortedMyList = new MyList<int>();
 
 			PopulateMyList(insertionSortedMyList, Path.Combine(baseDataPath, fileName));
 			PopulateMyList(bubbleSortedMyList, Path.Combine(baseDataPath, fileName));
 			PopulateMyList(quickSortedMyList, Path.Combine(baseDataPath, fileName));
+			PopulateMyList(middleQuickSortedMyList, Path.Combine(baseDataPath, fileName));
 
 			insertionSortedMyList.InsertionSort();
 			bubbleSortedMyList.BubbleSort();
 			quickSortedMyList.QuickSort();
+			middleQuickSortedMyList.QuickSortMiddlePivot();
 
 			results.Add(new ExportJsonData<int> { fileName = fileName, sorting = "Insertion Sort", comparisons = insertionSortedMyList.comparisonCount, elapsedMilliseconds = insertionSortedMyList.elapsedMilliseconds, elapsedNanoseconds = insertionSortedMyList.elapsedNanoseconds, values = DepopulateMyList(insertionSortedMyList) });
 			results.Add(new ExportJsonData<int> { fileName = fileName, sorting = "Bubble Sort", comparisons = bubbleSortedMyList.comparisonCount, elapsedMilliseconds = bubbleSortedMyList.elapsedMilliseconds, elapsedNanoseconds = bubbleSortedMyList.elapsedNanoseconds, values = DepopulateMyList(bubbleSortedMyList) });
 			results.Add(new ExportJsonData<int> { fileName = fileName, sorting = "Quick Sort", comparisons = quickSortedMyList.comparisonCount, elapsedMilliseconds = quickSortedMyList.elapsedMilliseconds, elapsedNanoseconds = quickSortedMyList.elapsedNanoseconds, values = DepopulateMyList(quickSortedMyList) });
+			results.Add(new ExportJsonData<int> { fileName = fileName, sorting = "Quick Sort Middle Pivot", comparisons = middleQuickSortedMyList.comparisonCount, elapsedMilliseconds = middleQuickSortedMyList.elapsedMilliseconds, elapsedNanoseconds = middleQuickSortedMyList.elapsedNanoseconds, values = DepopulateMyList(middleQuickSortedMyList) });
 		}
 
 		static void WriteJsonData()
 		{
+			Console.WriteLine("SKRIVER TIL JSON");
+
 			JsonSerializerOptions options = new JsonSerializerOptions() { WriteIndented = true };
 			var jsonContent = JsonSerializer.Serialize(results, options);
 

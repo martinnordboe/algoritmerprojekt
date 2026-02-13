@@ -210,13 +210,19 @@ namespace dsaprojekt
 				T value = this.items[i];
 				int pointer = i;
 
-				while (pointer > 0 && comparer.Compare(value, items[pointer - 1]) < 0)
+				while (pointer > 0)
 				{
 					comparisonCount++;
-					items[pointer] = items[pointer - 1];
-					pointer--;
+					if(comparer.Compare(value, items[pointer - 1]) < 0)
+					{
+						items[pointer] = items[pointer - 1];
+						pointer--;
+					}
+					else
+					{
+						break;
+					}
 				}
-				comparisonCount++;
 				items[pointer] = value;
 			}
 			sw.Stop();
@@ -252,6 +258,7 @@ namespace dsaprojekt
 
 		public void QuickSort()
 		{
+			Stopwatch sw = Stopwatch.StartNew();
 			comparisonCount = 0;
 
 			MyList<T> sorted = QuickSort(this);
@@ -259,12 +266,14 @@ namespace dsaprojekt
 			{
 				items[i] = sorted[i];
 			}
+			sw.Stop();
+			elapsedMilliseconds = sw.Elapsed.TotalMilliseconds;
+			elapsedNanoseconds = sw.Elapsed.TotalNanoseconds;
 		} 
 
 		// Bør kigge mere ind i in-place QuickSort i stedet for det her. Det her virker ikke særligt effektivt, da der oprettes utallige nye collections.
 		private MyList<T> QuickSort(MyList<T> collection)
 		{
-			Stopwatch sw = Stopwatch.StartNew();
 			if (collection is null)
 			{
 				throw new Exception();
@@ -310,9 +319,100 @@ namespace dsaprojekt
 				result.Add(sortedAfter[i]);
 			}
 
+			return result;
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		public void QuickSortMiddlePivot()
+		{
+			Stopwatch sw = Stopwatch.StartNew();
+			comparisonCount = 0;
+
+			MyList<T> sorted = QuickSortMiddlePivot(this);
+			for (int i = 0; i < count; i++)
+			{
+				items[i] = sorted[i];
+			}
 			sw.Stop();
 			elapsedMilliseconds = sw.Elapsed.TotalMilliseconds;
 			elapsedNanoseconds = sw.Elapsed.TotalNanoseconds;
+		}
+
+		// Bør kigge mere ind i in-place QuickSort i stedet for det her. Det her virker ikke særligt effektivt, da der oprettes utallige nye collections.
+		private MyList<T> QuickSortMiddlePivot(MyList<T> collection)
+		{
+			if (collection is null)
+			{
+				throw new Exception();
+			}
+			// Vigtigt, ellers så fejler alt xD den bliver aldrig færdig og giver out of range indexes, hvilket må være 0. Derfor aldrig lad den komme ned på 0.
+			if (collection.Count <= 1)
+			{
+				return collection;
+			}
+
+			int half = collection.Count / 2;
+
+			T pivot = collection[half];
+
+			MyList<T> before = new MyList<T>(collection.Count);
+			MyList<T> after = new MyList<T>(collection.Count);
+
+			for (int i = 0; i < collection.Count; i++)
+			{
+				if(i == half)
+				{
+					continue;
+				}
+
+				T value = collection[i];
+				comparisonCount++;
+				if (comparer.Compare(value, pivot) < 0)
+				{
+					before.Add(value);
+				}
+				else
+				{
+					after.Add(value);
+				}
+			}
+
+			MyList<T> sortedBefore = QuickSortMiddlePivot(before);
+			MyList<T> sortedAfter = QuickSortMiddlePivot(after);
+
+			MyList<T> result = new MyList<T>(collection.Count);
+			for (int i = 0; i < sortedBefore.Count; i++)
+			{
+				result.Add(sortedBefore[i]);
+			}
+
+			result.Add(pivot);
+
+			for (int i = 0; i < sortedAfter.Count; i++)
+			{
+				result.Add(sortedAfter[i]);
+			}
+
 			return result;
 		}
 
