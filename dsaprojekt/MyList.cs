@@ -24,7 +24,7 @@ namespace dsaprojekt
         public int Count { get { return count; } }
 
 
-        
+        // Hvis ingen int bliver sat, så sættes størrelsen automatisk som 4.
         public MyList(int initalCapacity = 4)
         {
             if(initalCapacity < 1)
@@ -199,7 +199,9 @@ namespace dsaprojekt
 		}
 
 
-
+		/// <summary>
+		/// Lavet ud fra pseudo kode i undervisningsmaterialet.
+		/// </summary>
 		public void InsertionSort()
 		{
 			Stopwatch sw = Stopwatch.StartNew();
@@ -230,6 +232,9 @@ namespace dsaprojekt
 			elapsedNanoseconds = sw.Elapsed.TotalNanoseconds;
 		}
 
+		/// <summary>
+		/// Lavet ud fra pseudo kode i undervisningsmaterialet.
+		/// </summary>
 		public void BubbleSort()
 		{
 			Stopwatch sw = Stopwatch.StartNew();
@@ -256,6 +261,10 @@ namespace dsaprojekt
 			elapsedNanoseconds = sw.Elapsed.TotalNanoseconds;
 		}
 
+		/// <summary>
+		/// Lavet ud fra pseudo koden i undervisningsmaterialet. Opdelt i to funktioner, da den ene skal kunne kalde sig selv og pass en MyList som argument, imens denne
+		/// Skal fungere ved at metoden bliver kaldt på instansen.
+		/// </summary>
 		public void QuickSort()
 		{
 			Stopwatch sw = Stopwatch.StartNew();
@@ -271,12 +280,13 @@ namespace dsaprojekt
 			elapsedNanoseconds = sw.Elapsed.TotalNanoseconds;
 		} 
 
+		// Den rekursive Quick Sort funktion. Private så den ikke kaldes ude fra.
 		// Bør kigge mere ind i in-place QuickSort i stedet for det her. Det her virker ikke særligt effektivt, da der oprettes utallige nye collections.
 		private MyList<T> QuickSort(MyList<T> collection)
 		{
 			if (collection is null)
 			{
-				throw new Exception();
+				throw new Exception("Fy, det er ikke så godt, collection er null");
 			}
 			// Vigtigt, ellers så fejler alt xD den bliver aldrig færdig og giver out of range indexes, hvilket må være 0. Derfor aldrig lad den komme ned på 0.
 			if(collection.Count <= 1)
@@ -342,7 +352,7 @@ namespace dsaprojekt
 
 
 
-
+		
 		public void QuickSortMiddlePivot()
 		{
 			Stopwatch sw = Stopwatch.StartNew();
@@ -358,7 +368,12 @@ namespace dsaprojekt
 			elapsedNanoseconds = sw.Elapsed.TotalNanoseconds;
 		}
 
-		// Bør kigge mere ind i in-place QuickSort i stedet for det her. Det her virker ikke særligt effektivt, da der oprettes utallige nye collections.
+		/// <summary>
+		/// Quick Sort metode, hvor pivot er skiftet til midten af MyList.
+		/// </summary>
+		/// <param name="collection"></param>
+		/// <returns></returns>
+		/// <exception cref="Exception"></exception>
 		private MyList<T> QuickSortMiddlePivot(MyList<T> collection)
 		{
 			if (collection is null)
@@ -371,15 +386,19 @@ namespace dsaprojekt
 				return collection;
 			}
 
+			// Halvdelen af listen
 			int half = collection.Count / 2;
 
+			// Pivot sættes til halvdelen
 			T pivot = collection[half];
 
 			MyList<T> before = new MyList<T>(collection.Count);
 			MyList<T> after = new MyList<T>(collection.Count);
 
+			// Da vi ikke længere sætter pivot til starten, sættes loopet til at starte ved 0
 			for (int i = 0; i < collection.Count; i++)
 			{
+				// Undgå pivot - ellers er resten det samme
 				if(i == half)
 				{
 					continue;

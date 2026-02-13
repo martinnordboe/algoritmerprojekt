@@ -277,7 +277,7 @@ namespace dsaprojekttest
 		}
 
 		[TestMethod]
-		public void QucikSort_Integer_SameElementsList_ReturnsSortedSameElementsList()
+		public void QuickSort_Integer_SameElementsList_ReturnsSortedSameElementsList()
 		{
 			MyList<int> sameElementsMyList = new MyList<int>() { 10, 64, 29, 10, 30, 57 };
 			MyList<int> expectedSameElementsMyList = new MyList<int>() { 10, 10, 29, 30, 57, 64 };

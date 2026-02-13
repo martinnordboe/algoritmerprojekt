@@ -19,16 +19,19 @@ namespace dsaprojekt
 
 		static void Main(string[] args)
         {
+			// Her looper jeg alle filerne igennem og sikrer at hver fil / datasæt bliver brugt med hver sorteringsalgoritme.
 			foreach(var file in jsonFiles)
 			{
 				RunAllAlgorithmsOnJsonFile(file);
 			}
 
+			// skriver resultater til results.json
 			WriteJsonData();
 
+
+			// starter på grafer, DFS og BFS her, hvor jeg instantierer en graph, tilføjer nodes og laver edges til nodes.
 			Graph<string> park = new Graph<string>();
 
-			// Skulle gerne være alle de nodes i opgaven - HUSK AT KIGGE IGENNEM IGEN, FOR AT SIKRE AT DET ER ALLE
 			park.AddNode("Entrance");
 
 			park.AddNode("Carousel");
@@ -62,86 +65,90 @@ namespace dsaprojekt
 			
 			park.AddEdge("Ice Cream", "Pirate Ship");
 
-
-			Console.WriteLine($"Data of node 'Carousel': {park.GetNode("Carousel").Data}");
-			Console.WriteLine("\nAll Edges:\n");
-			foreach (var edge in park.GetNode("Carousel").Edges)
-			{
-				Console.WriteLine(edge.To.Data);
-				Console.WriteLine(edge.From.Data);
-				Console.WriteLine("\n");
-			}
-
+			// Her kalder jeg så funktionen der kører BFS og DFS på grafens noder og printer alt dataen ud til opgaven, for begge mål.
+			Console.WriteLine("-----------------------------------------------------------");
+			Console.WriteLine("Mål A:");
 			TestGraphSearch(park, "Entrance", "Water Ride");
-
+			Console.WriteLine("Mål B:");
 			TestGraphSearch(park, "Entrance", "Volcano Ride");
 		}
 
+		/// <summary>
+		///		Instantierer BFS og DFS og finder path fra start node til goal node, med både BFS og DFS. Alt printes til Console.
+		/// </summary>
+		/// <param name="graph"></param>
+		/// <param name="start"></param>
+		/// <param name="goal"></param>
 		static void TestGraphSearch(Graph<string> graph, string start, string goal)
 		{
+			Console.WriteLine("-----------------------------------------------------------");
+			Console.WriteLine($"Start node:   {start}");
+			Console.WriteLine($"Goal node:    {goal}");
+
 			BFS<string> bfs = new BFS<string>();
 			if (bfs.Search(graph.GetNode(start), graph.GetNode(goal)))
 			{
-				Console.WriteLine("BFS Results:");
-				Console.WriteLine($"Visited order:");
+				Console.WriteLine("\n///////////////////////////////////////////");
+				Console.WriteLine("########### BFS #############:");
+				Console.WriteLine($"Visited amount of nodes {bfs.VisitedOrder.Count}. Visited order:\n");
 				for(int i = 0; i < bfs.VisitedOrder.Count; i++)
 				{
-					Console.WriteLine(bfs.VisitedOrder[i].Data);
+					Console.Write(bfs.VisitedOrder[i].Data);
 					if(i != bfs.VisitedOrder.Count -1)
 					{
-						Console.WriteLine("  |  ");
-						Console.WriteLine("  |  ");
-						Console.WriteLine("  V ");
+						Console.Write(" --> ");
 					}
 				}
-				Console.WriteLine($"\n\nPath to goal:");
+				Console.WriteLine("\n\n///////////////////////////////////////////");
 				List<Node<string>> bfsPath = bfs.GetPath(graph.GetNode(start), graph.GetNode(goal));
+				Console.WriteLine($"\nPath to goal - {bfsPath.Count} nodes, {bfsPath.Count - 1} edges\n");
 				for (int i = 0; i < bfsPath.Count; i++)
 				{
-					Console.WriteLine(bfsPath[i].Data);
+					Console.Write(bfsPath[i].Data);
 					if (i != bfsPath.Count - 1)
 					{
-						Console.WriteLine("  |  ");
-						Console.WriteLine("  |  ");
-						Console.WriteLine("  V ");
+						Console.Write(" --> ");
 					}
 				}
+				Console.WriteLine("\n\n///////////////////////////////////////////");
 			}
 
-			Console.WriteLine("---DEPTH FIRST SEARCH NU---");
 
 			DFS<string> dfs = new DFS<string>();
 			if (dfs.Search(graph.GetNode(start), graph.GetNode(goal)))
 			{
-				Console.WriteLine("DFS Results:");
-				Console.WriteLine($"Visited order:");
+				Console.WriteLine("########### DFS #############:");
+				Console.WriteLine($"Visited amount of nodes {dfs.VisitedOrder.Count}. Visited order:\n");
 				for (int i = 0; i < dfs.VisitedOrder.Count; i++)
 				{
-					Console.WriteLine(dfs.VisitedOrder[i].Data);
+					Console.Write(dfs.VisitedOrder[i].Data);
 					if (i != dfs.VisitedOrder.Count - 1)
 					{
-						Console.WriteLine("  |  ");
-						Console.WriteLine("  |  ");
-						Console.WriteLine("  V ");
+						Console.Write(" --> ");
 					}
 				}
-				Console.WriteLine($"\n\nPath to goal:");
+				Console.WriteLine("\n\n///////////////////////////////////////////");
 				List<Node<string>> dfsPath = dfs.GetPath(graph.GetNode(start), graph.GetNode(goal));
+				Console.WriteLine($"\nPath to goal - {dfsPath.Count} nodes, {dfsPath.Count - 1} edges\n");
 				for (int i = 0; i < dfsPath.Count; i++)
 				{
-					Console.WriteLine(dfsPath[i].Data);
+					Console.Write(dfsPath[i].Data);
 					if (i != dfsPath.Count - 1)
 					{
-						Console.WriteLine("  |  ");
-						Console.WriteLine("  |  ");
-						Console.WriteLine("  V ");
+						Console.Write(" --> ");
 					}
 				}
+				Console.WriteLine("\n\n///////////////////////////////////////////");
 			}
-
+			Console.WriteLine("\n\n\n\n\n\n-----------------------------------------------------------");
 		}
 
-
+		/// <summary>
+		/// Bruges til at konvertere fra T[] array til MyList, da der ikke kan deserializes direkte til MyList
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="myList"></param>
+		/// <param name="completeFilePath"></param>
 		static void PopulateMyList<T>(MyList<T> myList, string completeFilePath)
         {
 			string jsonContent = File.ReadAllText(completeFilePath);
@@ -156,9 +163,14 @@ namespace dsaprojekt
 					myList.Add(item);
 				}
 			}
-			Console.WriteLine($"Contents of {completeFilePath} have been added to list");
 		}
 
+		/// <summary>
+		/// Bruges til at konvertere fra MyList til en T[] array, da jeg ikke kan JSON serialize med  MyList
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="myList"></param>
+		/// <returns></returns>
 		static T[] DepopulateMyList<T>(MyList<T> myList)
 		{
 			T[] values = new T[myList.Count];
@@ -169,6 +181,12 @@ namespace dsaprojekt
 			return values;
 		}
 
+		/// <summary>
+		/// Instantierer 4 MyList, kalder PopulateMyList som får values array fra JSON deserialized, loopet over i mine MyList, da JsonSerializer ikke kan deserialize til MyList instanser.
+		/// Laver forskellig sortering på hver af listerne.
+		/// Instantierer nye ExportJsonData objekter og tilføjer performance målinger dem, samt tilføjer objekterne til listen results.
+		/// </summary>
+		/// <param name="fileName"></param>
 		static void RunAllAlgorithmsOnJsonFile(string fileName)
 		{
 			MyList<int> insertionSortedMyList = new MyList<int>();
@@ -192,27 +210,38 @@ namespace dsaprojekt
 			results.Add(new ExportJsonData<int> { fileName = fileName, sorting = "Quick Sort Middle Pivot", comparisons = middleQuickSortedMyList.comparisonCount, elapsedMilliseconds = middleQuickSortedMyList.elapsedMilliseconds, elapsedNanoseconds = middleQuickSortedMyList.elapsedNanoseconds, values = DepopulateMyList(middleQuickSortedMyList) });
 		}
 
+		/// <summary>
+		/// Gemmer JSON til JSON fil
+		/// </summary>
 		static void WriteJsonData()
 		{
-			Console.WriteLine("SKRIVER TIL JSON");
-
-			JsonSerializerOptions options = new JsonSerializerOptions() { WriteIndented = true };
-			var jsonContent = JsonSerializer.Serialize(results, options);
-
-			File.WriteAllText(outputResultPath, jsonContent);
+			File.WriteAllText(outputResultPath, SerializeToJson());
 		}
 
-		static void WriteTextFile()
+		/// <summary>
+		/// Serializer results (listen af ExportJsonData objekter) til JSON og returner JSON string
+		/// </summary>
+		/// <returns></returns>
+		static string SerializeToJson() 
 		{
-			//
+			JsonSerializerOptions options = new JsonSerializerOptions() { WriteIndented = true };
+			return JsonSerializer.Serialize(results, options);
 		}
 	}
 
+	/// <summary>
+	///		Klasse med property values til deserializing af JSON til array der kan bruges til instantiering af MyList med rigtig data.
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
 	public class JsonData<T>
 	{
 		public T[] values { get; set; }
 	}
 
+	/// <summary>
+	///		Klasse med properties til serializing af performance dataen til JSON, så der kan gemmes i results.json filen, som krav i opgaven
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
     public class ExportJsonData<T>
     {
 		public string fileName { get ; set; }
