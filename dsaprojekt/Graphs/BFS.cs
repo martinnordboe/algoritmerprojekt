@@ -62,19 +62,16 @@
 
 			Parent[start] = start;
 
+			if (start.Data.Equals(goal.Data))
+			{
+				return true;
+			}
+
 			while (queue.Count > 0)
 			{
 				//3. Fjern og anvend den første kant fra jeres queue
 				Node<T> current = queue.Dequeue();
 
-				//4. Hvis en slutnode ønskes fundet testes det om destinationen er
-				//slutnoden
-				//• Algoritmen afsluttes hvis dette er tilfældet
-				//• Stien findes ved at følge parentes fra destinationen tilbage til start
-				if (current.Data.Equals(goal.Data))
-				{
-					return true;
-				}
 
 				foreach (var edge in current.Edges)
 				{
@@ -88,6 +85,14 @@
 						visited.Add(edge.To);
 						VisitedOrder.Add(edge.To);
 						Parent[edge.To] = current;
+						//4. Hvis en slutnode ønskes fundet testes det om destinationen er
+						//slutnoden
+						//• Algoritmen afsluttes hvis dette er tilfældet
+						//• Stien findes ved at følge parentes fra destinationen tilbage til start
+						if (edge.To.Data.Equals(goal.Data))
+						{
+							return true;
+						}
 						queue.Enqueue(edge.To);
 					}
 				}
